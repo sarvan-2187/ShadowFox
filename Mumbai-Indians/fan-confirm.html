@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Successful - Mumbai Indians Fan Meetup</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(to bottom right, #f0f8ff, #87cefa);            
+            display: flex;
+            padding: 10px;
+            color: #ffffff;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        .confirmation-container {
+            background: rgb(0, 0, 0);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+            text-align: center;
+            width: 500px;
+            max-width: 95%;
+        }
+        
+        .confirmation-container h2 {
+            margin-bottom: 0.5rem;
+            color: #ffffff;
+            font-family: 'DM Sans', sans-serif;
+            font-weight: bold;
+        }
+        
+        .confirmation-container h3 {
+            margin-bottom: 1.5rem;
+            color: #FFD700;
+            font-family: 'DM Sans', sans-serif;
+        }
+        
+        .team-logo {
+            width: 80px;
+            height: auto;
+            margin-bottom: 10px;
+        }
+        
+        .confirmation-icon {
+            width: 100px;
+            height: 100px;
+            margin: 20px auto;
+            background-color: #1b5fa2;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 50px;
+            color: #ffffff;
+        }
+        
+        .confirmation-message {
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        
+        .event-details {
+            background-color: rgba(27, 95, 162, 0.3);
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: left;
+        }
+        
+        .event-details p {
+            margin: 10px 0;
+            font-size: 14px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #1b5fa2;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            margin: 10px 5px;
+            width: 200px;
+        }
+        
+        .btn:hover {
+            background: #004ba0;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+        
+        .btn-primary {
+            background: #1b5fa2;
+        }
+        
+        /* Add QR code styling */
+        .qr-code {
+            width: 120px;
+            height: 120px;
+            background-color: white;
+            margin: 20px auto;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        
+        .registration-id {
+            font-family: 'DM Sans', sans-serif;
+            color: #FFD700;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        
+        /* Guidelines section */
+        .guidelines {
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: left;
+            font-size: 13px;
+        }
+        
+        .guidelines h4 {
+            color: #FFD700;
+            margin-bottom: 10px;
+        }
+        
+        .guidelines ul {
+            padding-left: 20px;
+        }
+        
+        .guidelines li {
+            margin-bottom: 5px;
+        }
+        
+        /* Animation for checkmark */
+        @keyframes scaleIn {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        
+        .checkmark {
+            animation: scaleIn 0.5s ease-in-out forwards;
+        }
+        
+        @media (max-width: 768px) {
+            .confirmation-container {
+                box-shadow: none;
+                padding: 1.5rem;
+            }
+            
+            .confirmation-message {
+                font-size: 16px;
+            }
+            
+            .btn {
+                display: block;
+                margin: 10px auto;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="confirmation-container">
+        <img src="Images/logo.svg" alt="Mumbai Indians Logo" class="team-logo">
+        <h2>Mumbai Indians</h2>
+        <h3>Registration Successful!</h3>
+        
+        <div class="confirmation-icon checkmark">✓</div>
+        
+        <div class="confirmation-message">
+            You're officially part of the Mumbai Indians Fan Meetup!<br>
+            We can't wait to see you there.
+        </div>
+        
+        <div class="qr-code">
+            <img src="" alt="QR Code for Entry">
+        </div>
+        <p>Show this QR code at the venue for quick entry</p>
+        
+        <div class="event-details">
+            <p><strong>Registration ID:</strong> <span class="registration-id">MIFAN-2025-7834</span></p>
+            <p><strong>Event:</strong> Meet & Greet with MI Players</p>
+            <p><strong>Date:</strong> April 15, 2025</p>
+            <p><strong>Time:</strong> 4:00 PM - 7:00 PM</p>
+            <p><strong>Venue:</strong> Wankhede Stadium, Mumbai</p>
+        </div>
+        
+        <div class="guidelines">
+            <h4>Important Guidelines</h4>
+            <ul>
+                <li>Please bring a photo ID for verification</li>
+                <li>Gates open 1 hour before the event</li>
+                <li>No outside food or beverages allowed</li>
+                <li>Limited parking available, public transport recommended</li>
+            </ul>
+        </div>
+        
+        <p>A confirmation email with all details has been sent to your registered email address.</p>
+        
+        <div class="buttons">
+            <a href="index.html" class="btn btn-primary">Back to Home</a>
+        </div>
+    </div>
+    
+    <script>
+        function generateRegistrationId() {
+            const random = Math.floor(1000 + Math.random() * 9000);
+            return `MIFAN-2025-${random}`;
+        }
+        
+        document.querySelector('.registration-id').textContent = generateRegistrationId();
+    </script>
+</body>
+</html>

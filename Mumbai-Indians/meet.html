@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fan Meetup Form - Mumbai Indians</title>
+    <link rel="icon" href="Images/logo.svg">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(to bottom right, #f0f8ff, #87cefa);            
+            display: flex;
+            padding: 10px;
+            color: #ffffff;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        .meetup-container {
+            background: rgb(0, 0, 0);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+            text-align: center;
+            width: 500px;
+        }
+        
+        .meetup-container h2 {
+            margin-bottom: 0.5rem;
+            color: #ffffff;
+            font-family: 'DM Sans', sans-serif;
+            font-weight: bold;
+        }
+        
+        .meetup-container h3 {
+            margin-bottom: 1.5rem;
+            color: #FFD700;
+            font-family: 'DM Sans', sans-serif;
+        }
+        
+        .input-group {
+            margin-bottom: 1.2rem;
+            text-align: left;
+        }
+        
+        .input-group label {
+            display: block;
+            font-size: 14px;
+            color: #ffffff;
+        }
+        
+        .input-group input, .input-group select, .input-group textarea {
+            width: 100%;
+            color: #f0f8ff;
+            background-color: #000000;
+            padding: 8px;
+            border-bottom: 2px solid white;
+            border-top: none;
+            border-left: none;
+            border-right: none;
+            outline: none;
+            margin-top: 5px;
+            transition: all 0.5s ease;
+        }
+
+        .input-group select {
+            appearance: none;
+            background: url("data:image/svg+xml;utf8,<svg fill='white' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>") no-repeat;
+            background-position: right 8px center;
+            background-color: #000000;
+        }
+
+        .input-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .input-group input:focus, .input-group select:focus, .input-group textarea:focus {
+            border-bottom: 2px solid #1b5fa2;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 10px;
+            background: #1b5fa2;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+        
+        .submit-btn:hover {
+            background: #004ba0;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+        
+        .submit-btn:disabled {
+            background: #aaa;
+        }
+        
+        .loading {
+            display: none;
+            margin-top: 10px;
+        }
+        
+        .loading span {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            margin: 0 2px;
+            background: #FFD700;
+            border-radius: 50%;
+            animation: bounce 1.2s infinite ease-in-out;
+        }
+        
+        .loading span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .loading span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        .team-logo {
+            width: 80px;
+            height: auto;
+            margin-bottom: 10px;
+        }
+        
+        .checkbox-group {
+            margin: 1rem 0;
+            text-align: left;
+        }
+        
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            color: #ffffff;
+            cursor: pointer;
+        }
+        
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            margin-right: 10px;
+        }
+        
+        @keyframes bounce {
+            0%, 80%, 100% {
+                transform: scale(0);
+            }
+            40% {
+                transform: scale(1);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .meetup-container {
+                box-shadow: none;
+                max-width: 95%;
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="meetup-container">
+        <img src="Images/logo.svg" alt="Mumbai Indians Logo" class="team-logo">
+        <h2>Mumbai Indians</h2>
+        <h3>Fan Meetup Registration</h3>
+        
+        <div class="input-group">
+            <label for="fullname">Full Name</label>
+            <input type="text" id="fullname" placeholder="Enter your full name" required>
+            <span id="name_error" style="color: red;"></span>
+        </div>
+        
+        <div class="input-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" placeholder="Enter your email address" required>
+            <span id="email_error" style="color: red;"></span>
+        </div>
+        
+        <div class="input-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" placeholder="Enter your phone number" required>
+            <span id="phone_error" style="color: red;"></span>
+        </div>
+        
+        <div class="input-group">
+            <label for="meetup-type">Meetup Type</label>
+            <select id="meetup-type" required>
+                <option value="" disabled selected>Select meetup type</option>
+                <option value="match-screening">Match Screening</option>
+                <option value="fan-club">Fan Club Meeting</option>
+                <option value="player-event">Player Meet & Greet</option>
+                <option value="training">Training Session Visit</option>
+            </select>
+            <span id="type_error" style="color: red;"></span>
+        </div>
+        
+        <div class="input-group">
+            <label for="date">Preferred Date</label>
+            <input type="date" id="date" required>
+            <span id="date_error" style="color: red;"></span>
+        </div>
+        
+        <div class="input-group">
+            <label for="location">Preferred Location</label>
+            <select id="location" required>
+                <option value="" disabled selected>Select location</option>
+                <option value="wankhede">Wankhede Stadium</option>
+                <option value="bkc">BKC Club House</option>
+                <option value="andheri">Andheri Sports Complex</option>
+                <option value="reliance">Reliance Corporate Park</option>
+            </select>
+            <span id="location_error" style="color: red;"></span>
+        </div>
+        
+        <div class="input-group">
+            <label for="members">Number of Members</label>
+            <input type="number" id="members" min="1" max="10" placeholder="Number of people attending" required>
+            <span id="members_error" style="color: red;"></span>
+        </div>
+        
+        <div class="input-group">
+            <label for="notes">Special Requests/Notes</label>
+            <textarea id="notes" placeholder="Any special requests or notes for the organizers"></textarea>
+        </div>
+        
+        <div class="checkbox-group">
+            <label>
+                <input type="checkbox" id="newsletter" checked>
+                Subscribe to MI Paltan newsletter
+            </label>
+        </div>
+        
+        <div class="checkbox-group">
+            <label>
+                <input type="checkbox" id="terms" required>
+                I agree to the terms and conditions
+            </label>
+            <span id="terms_error" style="color: red;"></span>
+        </div>
+        
+        <button class="submit-btn" onclick="handleSubmit()">Register for Meetup</button>
+        <div class="loading" id="loading">
+            <span></span><span></span><span></span>
+        </div>
+    </div>
+    
+    <script>
+        function handleSubmit() {
+            const errorFields = ['name_error', 'email_error', 'phone_error', 'type_error', 
+                              'date_error', 'location_error', 'members_error', 'terms_error'];
+            errorFields.forEach(field => {
+                document.getElementById(field).textContent = '';
+            });
+            
+            const fullname = document.getElementById('fullname').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const meetupType = document.getElementById('meetup-type').value;
+            const date = document.getElementById('date').value;
+            const location = document.getElementById('location').value;
+            const members = document.getElementById('members').value;
+            const terms = document.getElementById('terms').checked;
+            
+            let isValid = true;
+            
+            if (!fullname) {
+                document.getElementById('name_error').textContent = 'Please enter your full name';
+                isValid = false;
+            }
+            
+            if (!email) {
+                document.getElementById('email_error').textContent = 'Please enter your email address';
+                isValid = false;
+            } else if (!validateEmail(email)) {
+                document.getElementById('email_error').textContent = 'Please enter a valid email address';
+                isValid = false;
+            }
+            
+            if (!phone) {
+                document.getElementById('phone_error').textContent = 'Please enter your phone number';
+                isValid = false;
+            }
+            
+            if (!meetupType) {
+                document.getElementById('type_error').textContent = 'Please select a meetup type';
+                isValid = false;
+            }
+            
+            if (!date) {
+                document.getElementById('date_error').textContent = 'Please select a preferred date';
+                isValid = false;
+            } else {
+                const selectedDate = new Date(date);
+                const today = new Date();
+                if (selectedDate < today) {
+                    document.getElementById('date_error').textContent = 'Please select a future date';
+                    isValid = false;
+                }
+            }
+            
+            if (!location) {
+                document.getElementById('location_error').textContent = 'Please select a preferred location';
+                isValid = false;
+            }
+            
+            if (!members) {
+                document.getElementById('members_error').textContent = 'Please enter number of members';
+                isValid = false;
+            } else if (members < 1 || members > 10) {
+                document.getElementById('members_error').textContent = 'Members must be between 1 and 10';
+                isValid = false;
+            }
+            
+            if (!terms) {
+                document.getElementById('terms_error').textContent = 'You must agree to the terms and conditions';
+                isValid = false;
+            }
+            
+            if (isValid) {
+                document.getElementById('loading').style.display = 'block';
+                document.querySelector('.submit-btn').disabled = true;
+                
+                setTimeout(() => {
+                    alert('Thank you for registering! Your meetup request has been submitted. We will contact you shortly with confirmation details.');
+                    document.getElementById('loading').style.display = 'none';
+                    document.querySelector('.submit-btn').disabled = false;
+                    alert('Welcome to Mumbai Indians Paltan! Your account has been created successfully.');
+                    window.location.href = 'fan-confirm.html';
+                }, 2000);
+            }
+        }
+        
+        function validateEmail(email) {
+            const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return re.test(email.toLowerCase());
+        }
+        
+        function resetForm() {
+            document.getElementById('fullname').value = '';
+            document.getElementById('email').value = '';
+            document.getElementById('phone').value = '';
+            document.getElementById('meetup-type').selectedIndex = 0;
+            document.getElementById('date').value = '';
+            document.getElementById('location').selectedIndex = 0;
+            document.getElementById('members').value = '';
+            document.getElementById('notes').value = '';
+            document.getElementById('newsletter').checked = true;
+            document.getElementById('terms').checked = false;
+        }
+    </script>
+</body>
+</html>

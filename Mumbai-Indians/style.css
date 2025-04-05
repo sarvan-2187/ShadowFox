@@ -1,0 +1,742 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    background-color: #d2d2d2;
+    padding: 0;
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+.main {
+    background: url('Images/stadium.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    min-height: 100vh;
+    background-attachment: fixed;
+    border: none;
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    background-color: transparent;
+    color: rgb(255, 255, 255);
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-logo {
+    font-size: 1.8rem;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: bold;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+nav ul li {
+    margin-left: 25px;
+}
+
+nav a {
+    color: rgb(255, 255, 255);
+    text-decoration: none;
+    font-size: 1.5rem;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.5s;
+    font-weight: 600;
+    padding: 0.5rem;
+    border-radius: 5px;
+}
+
+nav ul li a:hover {
+    background-color: #b5b5b5;
+    color: rgb(0, 0, 0);
+    text-shadow: none;
+}
+
+.button-sign {
+    color: #f8f8f8;
+    font-size: 1.3rem;
+    font-family: 'DM Sans', sans-serif;
+    padding: 10px 10px;
+    border-radius: 5px;
+    background-color: #000000;
+    font-weight: 700;
+    border: 2px solid rgb(0, 0, 0);
+    text-decoration: none;
+    transition: background-color linear 0.3s;
+}
+
+.button-sign:hover {
+    background-color: #353535;
+    color: #ffffff;
+    border: 2px solid #353535;
+}
+
+.hero {
+    background-size: cover;
+    background-position: center;
+    color: white;
+    height: 45vh;
+    text-align: center;
+    padding: 150px 20px;
+    animation: float linear 0.3s;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.hero h1 {
+    font-size: 3.5rem;
+    margin-bottom: 2rem;
+    font-family: 'Poppins', sans-serif;
+    color: #ffffff;
+}
+
+.hide-desktop {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+#menu-toggle {
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.section {
+    padding: 20px 10px;
+    background-color: #1b5fa2;
+    color: white;
+}
+
+.grid {
+    display: grid;
+    gap: 8px;
+}
+
+.item {
+    background-color: #444;
+    color: #fff;
+    border-radius: 5px;
+    padding: 20px;
+    font-size: 150%;
+}
+
+.mobile-only {
+    display: block;
+}
+
+.desktop-only {
+    display: none;
+}
+
+h1 {
+    text-align: center;
+    font-size: 3rem;
+    margin-bottom: 40px;
+    color: #FFD700;
+    text-shadow: 2px 2px 5px rgba(0,0,0,0.4);
+  }
+
+  .trophy {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 25px;
+    margin: 20px auto;
+    max-width: 800px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+    transition: transform 0.3s ease, background 0.3s ease;
+    border: 4px solid #FFD700;
+  }
+
+  .trophy:hover {
+    transform: scale(1.03);
+    background: rgba(255, 255, 255, 0.15);
+  }
+
+  h2 {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+    color: #FFD700;
+  }
+
+  p {
+    margin: 8px 0;
+    font-size: 1.1rem;
+  }
+
+
+  @media (max-width: 600px) {
+    h1 {
+      font-size: 2rem;
+    }
+    h2 {
+      font-size: 1.4rem;
+    }
+    .trophy {
+      padding: 18px;
+    }
+  }
+
+.grid {
+    grid-template-columns: 1fr;
+    padding: 0 1rem;
+}
+
+.item-0, .item-1, .item-2, .item-3, .item-4 {
+    min-height: 300px;
+}
+
+.item-0 {
+    color: #000000;
+    background: url('https://www.hindustantimes.com/ht-img/img/2023/05/04/1600x900/mi-2013_1683198503255_1683198507333.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.item-1 {
+    background: url('https://drop.ndtv.com/albums/SPORTS/top-five-fun-pics-ipl-final/roy98415.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.item-2 {
+    background: url('https://img1.hscicdn.com/image/upload/f_auto/lsci/db/PICTURES/CMS/263300/263374.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.item-3 {
+    background: url('https://www.mumbaiindians.com/static-assets/waf-images/80/76/df/4-3/592-444/3JscPltUmm.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.item-4 {
+    background: url('https://akm-img-a-in.tosshub.com/indiatoday/images/story/202011/PTI11-11-2020_000004B_1200x768.jpeg?size=690:388');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+@media (max-width: 768px) {
+    .main {
+        background: url('Images/stadium.png');
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-attachment: fixed;
+    }
+    
+    header {
+        display: block;
+        gap: 0.2rem;
+        align-items: flex-end;
+    }
+    
+    .hide-mobile {
+        display: none;
+    }
+    
+    .header-logo {
+        display: inline;
+    }
+    
+    .header-logo .hide-desktop {
+        margin-right: auto;
+    }
+    
+    nav {
+        display: inline;
+    }
+    
+    #hide-mobile {
+        display: none;
+    }
+    
+    nav ul {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-evenly;
+        display: none;
+        margin-top: 10px;
+    }
+    
+    nav ul li {
+        margin-left: 0;
+        margin-top: 10px;
+    }
+    
+    .hero {
+        padding: 100px 20px;
+        height: auto;
+        min-height: 45vh;
+    }
+    
+    .hero h1 {
+        font-size: 2.5em;
+        color: #ffffff;
+    }
+    
+    .login-signup {
+        margin-top: 10px;
+    }
+    
+    .section {
+        padding: 0 1rem;
+        background-color: #1b5fa2;
+        color: white;
+    }
+
+    .section {
+        padding: 2rem;
+    }
+}
+
+@media (min-width: 768px) {
+    .hide-desktop {
+        display: none;
+    }
+    
+    .grid {
+        grid-template-columns: repeat(5, 1fr);
+        grid-template-rows: repeat(10, 1fr);
+        gap: 8px;
+        padding: 0 10rem;
+    }
+    
+    .mobile-only {
+        display: none;
+    }
+    
+    .desktop-only {
+        display: block;
+    }
+    
+    .item-0 {
+        grid-column: 1 / span 3;
+        grid-row: 1 / span 4;
+
+        min-height: 33rem;
+    }
+    
+    .item-1 {
+        grid-column: 4 / span 2;
+        grid-row: 1 / span 4;
+        min-height: unset;
+    }
+    
+    .item-2 {
+        grid-column: 1 / span 2;
+        grid-row: 5 / span 3;
+        min-height: unset;
+    }
+    
+    .item-3 {
+        grid-column: 1 / span 3;
+        grid-row: 8 / span 3;
+        min-height: unset;
+    }
+    
+    .item-4 {
+        grid-column: 4 / span 2;
+        grid-row: 5 / span 6;
+        min-height: unset;
+    }
+    
+    .item-6 {
+        grid-column: 3;
+        grid-row: 5 / span 3;
+        background: url('https://mrwallpaper.com/images/hd/mumbai-indians-gold-logo-i4qdgnpgmhvs1xtr.jpg');
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+}
+
+.videos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin: 2rem 0;
+}
+
+.video-item {
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.video-item:hover {
+    transform: translateY(-5px);
+}
+
+.video-wrapper {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    height: 0;
+    overflow: hidden;
+}
+
+.video-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+.video-item h3 {
+    padding: 1rem;
+    margin: 0;
+    color: #003B7A;
+    font-size: 1rem;
+    text-align: center;
+}
+
+/* Responsive video grid */
+@media (max-width: 768px) {
+    .videos-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .videos-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+}
+
+.points-table-section {
+    margin: 2rem 0;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 10px;
+}
+
+.points-table-section h1 {
+    color: #FFD700;
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.points-table {
+    width: 100%;
+    border-collapse: collapse;
+    color: white;
+    background: rgba(0, 0, 0, 0.5);
+    overflow-x: auto;
+    border-radius: 5px;
+}
+
+.points-table th, .points-table td {
+    padding: 12px 15px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.points-table th {
+    background-color: #1b5fa2;
+    color: #FFD700;
+    font-weight: 600;
+}
+
+.points-table tr:hover {
+    background-color: rgba(27, 95, 162, 0.4);
+}
+
+.points-table .team-logo {
+    width: 30px;
+    height: 30px;
+    vertical-align: middle;
+    margin-right: 8px;
+}
+
+.points-table .team-name {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    text-align: left;
+    padding-left: 10px;
+}
+
+.points-table .team-cell {
+    text-align: left;
+}
+
+.mi-row {
+    background-color: rgba(255, 230, 8, 0.4) !important;
+    font-weight: bold;
+}
+
+@media (max-width: 768px) {
+    .points-table-section {
+        padding: 10px;
+        overflow-x: auto;
+    }
+    
+    .table-container {
+        overflow-x: auto;
+    }
+    
+    .points-table th, .points-table td {
+        padding: 8px 10px;
+        font-size: 0.9rem;
+    }
+}
+
+.brand-partners {
+    padding: 2rem 0;
+    text-align: center;
+    background-color: #f8f9fa;
+}
+
+.brand-partners h1 {
+    margin-bottom: 2rem;
+    color: #003B7A;
+}
+
+.partners-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.partner-card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.partner-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.partner-logo {
+    width: 150px;
+    height: 100px;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.partner-name {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: #003B7A;
+}
+
+.partner-type {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 0.5rem;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .partners-grid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1.5rem;
+    }
+    
+    .partner-logo {
+        width: 120px;
+        height: 80px;
+    }
+}
+
+@media (max-width: 480px) {
+    .partners-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+    
+    .partner-card {
+        padding: 1rem;
+    }
+    
+    .partner-logo {
+        width: 100px;
+        height: 70px;
+        font-size: 0.8rem;
+    }
+    
+    .partner-name {
+        font-size: 0.9rem;
+    }
+    
+    .partner-type {
+        font-size: 0.8rem;
+    }
+}
+
+.footer {
+    background-color: #003B7A;
+    color: white;
+    padding: 3rem 1rem 1rem;
+    margin-top: 2rem;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-logo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.footer-logo img {
+    width: 100px;
+    height: auto;
+    margin-bottom: 1rem;
+}
+
+.footer-logo h3 {
+    color: #FFD700;
+    font-family: 'DM Sans', sans-serif;
+    margin: 0;
+}
+
+.footer-links h4, .footer-social h4 {
+    color: #FFD700;
+    margin-bottom: 1rem;
+    font-family: 'DM Sans', sans-serif;
+}
+
+.footer-links ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-links ul li {
+    margin-bottom: 0.5rem;
+}
+
+.footer-links ul li a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-links ul li a:hover {
+    color: #FFD700;
+}
+
+.social-icons {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.social-icon {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    background-color: white;
+    border-radius: 50%;
+    color: #003B7A;
+    text-align: center;
+    line-height: 40px;
+    transition: all 0.3s ease;
+    font-style: normal;
+    text-indent: -9999px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 24px;
+}
+
+/* Social media icons using emoji as placeholder (you can replace with actual icons) */
+.instagram {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23003B7A'%3E%3Cpath d='M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z'/%3E%3C/svg%3E");
+}
+
+.linkedin {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23003B7A'%3E%3Cpath d='M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z'/%3E%3C/svg%3E");
+}
+
+.facebook {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23003B7A'%3E%3Cpath d='M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-3 7h-1.924c-.615 0-1.076.252-1.076.889v1.111h3l-.238 3h-2.762v8h-3v-8h-2v-3h2v-1.923c0-2.022 1.064-3.077 3.461-3.077h2.539v3z'/%3E%3C/svg%3E");
+}
+
+.youtube {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23003B7A'%3E%3Cpath d='M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z'/%3E%3C/svg%3E");
+}
+
+.whatsapp {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23003B7A'%3E%3Cpath d='M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z'/%3E%3C/svg%3E");
+}
+
+.social-icon:hover {
+    transform: translateY(-3px);
+    background-color: #FFD700;
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 2rem;
+    margin-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+    .footer-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+    
+    .footer-social {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+}
