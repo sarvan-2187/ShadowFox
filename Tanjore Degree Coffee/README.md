@@ -1,1 +1,1 @@
-[Open interactive demo](https://embed.figma.com/board/uEJBINldHRXJT3aR1bnL9x/Website-Flowchart-Template--Copy-?node-id=0-1&embed-host=share)
+![image](https://github.com/user-attachments/assets/f16623f1-dc9e-4a0f-8337-eb0da9835fbe)
