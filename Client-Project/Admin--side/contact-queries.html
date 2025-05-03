@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TDC - Contact Form Queries</title>
+    <link rel="icon" href="Org.png">
+    <script type="module">
+        // Import Supabase from CDN using ES modules
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.38.4/+esm';
+        
+        // Wait for DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            // Create Supabase client
+            const supabaseUrl = 'https://biymjgwlkvhdvdnotmrj.supabase.co';
+            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJpeW1qZ3dsa3ZoZHZkbm90bXJqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ1MzAyOTAsImV4cCI6MjA2MDEwNjI5MH0.OyIcTLYL8eGTp-hXzrfMhTpLrFDQu0yx64dy4gqueKw';
+            const supabase = createClient(supabaseUrl, supabaseKey);
+
+            // DOM Elements
+            const queriesContainer = document.getElementById('queries-container');
+            const queryDetails = document.getElementById('query-details');
+            const noQuerySelected = document.getElementById('no-query-selected');
+            const queryIdDisplay = document.getElementById('query-id-display');
+            const customerName = document.getElementById('customer-name');
+            const customerEmail = document.getElementById('customer-email');
+            const querySubject = document.getElementById('query-subject');
+            const queryMessage = document.getElementById('query-message');
+            const queryDate = document.getElementById('query-date');
+            const replyTextarea = document.getElementById('reply-textarea');
+            const sendReplyBtn = document.getElementById('send-reply-btn');
+            const markResolvedBtn = document.getElementById('mark-resolved-btn');
+            const searchInput = document.getElementById('search-input');
+            const searchBtn = document.getElementById('search-btn');
+            const notification = document.getElementById('notification');
+            const filterOptions = document.getElementById('filter-options');
+
+            // Global variables
+            let queries = [];
+            let selectedQuery = null;
+            let currentFilter = 'all';
+
+            // Query status mapping with colors
+            const statusInfo = {
+                'new': { text: 'New', color: 'status-new' },
+                'in-progress': { text: 'In Progress', color: 'status-in-progress' },
+                'resolved': { text: 'Resolved', color: 'status-resolved' }
+            };
+
+            // Fetch queries from Supabase
+            async function fetchQueries() {
+                try {
+                    const { data, error } = await supabase
+                        .from('contact_entries')
+                        .select('*')
+                        .order('created_at', { ascending: false });
+                    
+                    if (error) throw error;
+                    
+                    if (data && data.length > 0) {
+                        queries = data.map(query => ({
+                            ...query,
+                            status: query.status || 'new',
+                            replies: query.replies || []
+                        }));
+                    } else {
+                       console.log("No Data Found")
+                    }
+                    
+                    filterQueries(currentFilter);
+                } catch (error) {
+                    console.error('Error fetching queries:', error);
+                    showNotification('Could not connect to database. Using sample data.', 'error');
+                    
+                    filterQueries(currentFilter);
+                }
+            }
+
+            // Filter queries based on status
+            function filterQueries(filter) {
+                currentFilter = filter;
+                let filteredQueries = [];
+                
+                if (filter === 'all') {
+                    filteredQueries = queries;
+                } else {
+                    filteredQueries = queries.filter(query => query.status === filter);
+                }
+                
+                renderQueriesList(filteredQueries);
+                
+                // Update filter buttons
+                document.querySelectorAll('.filter-option').forEach(btn => {
+                    btn.classList.remove('active');
+                    if (btn.dataset.filter === filter) {
+                        btn.classList.add('active');
+                    }
+                });
+            }
+
+            // Render queries list
+            function renderQueriesList(queriesToRender) {
+                if (queriesToRender.length === 0) {
+                    queriesContainer.innerHTML = `
+                        <div class="empty-state">
+                            <p>No queries found</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                queriesContainer.innerHTML = '';
+                queriesToRender.forEach(query => {
+                    const statusClass = statusInfo[query.status]?.color || '';
+                    const statusText = statusInfo[query.status]?.text || query.status;
+                    
+                    const queryItem = document.createElement('div');
+                    queryItem.className = `query-item ${selectedQuery && selectedQuery.id === query.id ? 'selected' : ''}`;
+                    queryItem.dataset.id = query.id;
+                    queryItem.innerHTML = `
+                        <div class="query-header">
+                            <div class="query-id">Query #${query.id}</div>
+                            <div class="query-status ${statusClass}">${statusText}</div>
+                        </div>
+                        <div class="query-info">
+                            <div class="query-subject">${query.subject || 'No Subject'}</div>
+                            <div>${query.name} | ${formatDate(query.created_at)}</div>
+                        </div>
+                    `;
+                    
+                    queryItem.addEventListener('click', () => selectQuery(query));
+                    queriesContainer.appendChild(queryItem);
+                });
+            }
+
+            // Select a query to display details
+            function selectQuery(query) {
+                selectedQuery = query;
+                
+                // Update selected class in queries list
+                document.querySelectorAll('.query-item').forEach(item => {
+                    item.classList.remove('selected');
+                    if (item.dataset.id == query.id) {
+                        item.classList.add('selected');
+                    }
+                });
+                
+                // Show query details panel
+                noQuerySelected.style.display = 'none';
+                queryDetails.style.display = 'block';
+                
+                // Update query details
+                queryIdDisplay.textContent = `#${query.id}`;
+                customerName.textContent = query.name || 'N/A';
+                customerEmail.textContent = query.email || 'N/A';
+                querySubject.textContent = query.subject || 'No Subject';
+                queryMessage.textContent = query.message || 'No Message';
+                
+                // Format and display date
+                queryDate.textContent = formatDate(query.created_at);
+                
+                // Update reply section based on status
+                updateReplySection(query);
+                
+                // Clear reply textarea
+                replyTextarea.value = '';
+                
+                // Update UI based on query status
+                if (query.status === 'resolved') {
+                    replyTextarea.disabled = true;
+                    sendReplyBtn.disabled = true;
+                    markResolvedBtn.disabled = true;
+                    markResolvedBtn.textContent = 'Resolved';
+                } else {
+                    replyTextarea.disabled = false;
+                    sendReplyBtn.disabled = false;
+                    markResolvedBtn.disabled = false;
+                    markResolvedBtn.textContent = 'Mark as Resolved';
+                }
+            }
+
+            // Update reply section with previous replies
+            function updateReplySection(query) {
+                const repliesContainer = document.getElementById('previous-replies');
+                repliesContainer.innerHTML = '';
+                
+                if (!query.replies || query.replies.length === 0) {
+                    repliesContainer.innerHTML = '<div class="no-replies">No previous replies</div>';
+                    return;
+                }
+                
+                query.replies.forEach(reply => {
+                    const replyElement = document.createElement('div');
+                    replyElement.className = 'reply-item';
+                    replyElement.innerHTML = `
+                        <div class="reply-header">
+                            <div class="reply-date">${formatDate(reply.date)}</div>
+                        </div>
+                        <div class="reply-message">${reply.message}</div>
+                    `;
+                    repliesContainer.appendChild(replyElement);
+                });
+            }
+
+            // Send reply to customer
+            async function sendReply() {
+                if (!selectedQuery) return;
+                
+                const replyText = replyTextarea.value.trim();
+                if (!replyText) {
+                    showNotification('Please enter a reply message', 'error');
+                    return;
+                }
+                
+                try {
+                    // Add reply to the query
+                    const reply = {
+                        date: new Date().toISOString(),
+                        message: replyText
+                    };
+                    
+                    const replies = selectedQuery.replies ? [...selectedQuery.replies, reply] : [reply];
+                    
+                    // Update query status to in-progress if it's new
+                    const newStatus = selectedQuery.status === 'new' ? 'in-progress' : selectedQuery.status;
+                    
+                    // Update in Supabase
+                    const { error } = await supabase
+                        .from('contact_entries')
+                        .update({ 
+                            replies: replies,
+                            status: newStatus
+                        })
+                        .eq('id', selectedQuery.id);
+                    
+                    if (error) throw error;
+                    
+                    // Update local data
+                    selectedQuery.replies = replies;
+                    selectedQuery.status = newStatus;
+                    
+                    // Update UI
+                    updateReplySection(selectedQuery);
+                    replyTextarea.value = '';
+                    
+                    // Refresh queries list
+                    const index = queries.findIndex(q => q.id === selectedQuery.id);
+                    if (index !== -1) {
+                        queries[index] = selectedQuery;
+                        filterQueries(currentFilter);
+                    }
+                    
+                    showNotification('Reply sent successfully', 'success');
+                    
+                    // Here you would typically send an actual email to the customer
+                    console.log(`Email would be sent to ${selectedQuery.email} with message: ${replyText}`);
+                    
+                } catch (error) {
+                    console.error('Error sending reply:', error);
+                    showNotification('Failed to send reply', 'error');
+                }
+            }
+
+            // Mark query as resolved
+            async function markResolved() {
+                if (!selectedQuery || selectedQuery.status === 'resolved') return;
+                
+                try {
+                    // Update in Supabase
+                    const { error } = await supabase
+                        .from('contact_entries')
+                        .update({ status: 'resolved' })
+                        .eq('id', selectedQuery.id);
+                    
+                    if (error) throw error;
+                    
+                    // Update local data
+                    selectedQuery.status = 'resolved';
+                    
+                    // Update UI
+                    selectQuery(selectedQuery);
+                    
+                    // Refresh queries list
+                    const index = queries.findIndex(q => q.id === selectedQuery.id);
+                    if (index !== -1) {
+                        queries[index] = selectedQuery;
+                        filterQueries(currentFilter);
+                    }
+                    
+                    showNotification('Query marked as resolved', 'success');
+                    
+                } catch (error) {
+                    console.error('Error marking query as resolved:', error);
+                    showNotification('Failed to update query status', 'error');
+                }
+            }
+
+            // Search for a query by ID or customer name
+            function searchQuery() {
+                const searchTerm = searchInput.value.trim().toLowerCase();
+                if (!searchTerm) return;
+                
+                const results = queries.filter(query => {
+                    return (
+                        query.id.toString() === searchTerm ||
+                        query.name.toLowerCase().includes(searchTerm) ||
+                        query.email.toLowerCase().includes(searchTerm) ||
+                        (query.subject && query.subject.toLowerCase().includes(searchTerm))
+                    );
+                });
+                
+                if (results.length > 0) {
+                    renderQueriesList(results);
+                    if (results.length === 1) {
+                        selectQuery(results[0]);
+                    }
+                } else {
+                    showNotification('No matching queries found', 'error');
+                }
+            }
+
+            // Helper function to format date
+            function formatDate(dateString) {
+                if (!dateString) return 'N/A';
+                const date = new Date(dateString);
+                return date.toLocaleString();
+            }
+
+            // Show notification
+            function showNotification(message, type = 'success') {
+                notification.textContent = message;
+                notification.className = `notification ${type}`;
+                notification.classList.add('show');
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 3000);
+            }
+
+            // Event Listeners
+            sendReplyBtn.addEventListener('click', sendReply);
+            markResolvedBtn.addEventListener('click', markResolved);
+
+            searchBtn.addEventListener('click', searchQuery);
+            searchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    searchQuery();
+                }
+            });
+
+            filterOptions.addEventListener('click', (e) => {
+                const option = e.target.closest('.filter-option');
+                if (option) {
+                    filterQueries(option.dataset.filter);
+                }
+            });
+
+            // Initialize app
+            fetchQueries();
+
+            // Set up real-time subscription for query updates
+            supabase
+                .channel('contact_entries-changes')
+                .on('postgres_changes', 
+                    { event: '*', schema: 'public', table: 'contact_entries' }, 
+                    payload => {
+                        // Handle real-time updates
+                        const { eventType, new: newRecord, old: oldRecord } = payload;
+                        
+                        if (eventType === 'INSERT') {
+                            // Add new record to array and handle as new query
+                            const newQuery = {
+                                ...newRecord,
+                                status: newRecord.status || 'new',
+                                replies: newRecord.replies || []
+                            };
+                            queries.unshift(newQuery);
+                            filterQueries(currentFilter);
+                            showNotification('New customer query received!', 'success');
+                        } else if (eventType === 'UPDATE') {
+                            // Update existing record
+                            const index = queries.findIndex(q => q.id === newRecord.id);
+                            if (index !== -1) {
+                                queries[index] = {
+                                    ...newRecord,
+                                    status: newRecord.status || 'new',
+                                    replies: newRecord.replies || []
+                                };
+                                filterQueries(currentFilter);
+                                
+                                // Update selected query if it was the one updated
+                                if (selectedQuery && selectedQuery.id === newRecord.id) {
+                                    selectQuery(queries[index]);
+                                }
+                            }
+                        } else if (eventType === 'DELETE') {
+                            // Remove deleted record
+                            const index = queries.findIndex(q => q.id === oldRecord.id);
+                            if (index !== -1) {
+                                queries.splice(index, 1);
+                                filterQueries(currentFilter);
+                                
+                                // Clear details if selected query was deleted
+                                if (selectedQuery && selectedQuery.id === oldRecord.id) {
+                                    selectedQuery = null;
+                                    noQuerySelected.style.display = 'flex';
+                                    queryDetails.style.display = 'none';
+                                }
+                            }
+                        }
+                    })
+                .subscribe();
+        });
+    </script>
+    <style>
+        :root {
+            --primary: #8B4513;
+            --primary-light: #A0522D;
+            --secondary: #D2B48C;
+            --accent: #F5DEB3;
+            --text: #333333;
+            --background: #FFF8E1;
+            --success: #4CAF50;
+            --warning: #FFC107;
+            --info: #2196F3;
+            --error: #F44336;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 2px solid var(--secondary);
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background-color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .logo-text h1 {
+            font-size: 24px;
+            color: var(--primary);
+            margin-bottom: 2px;
+        }
+
+        .logo-text p {
+            font-size: 12px;
+            color: var(--primary-light);
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 10px;
+            flex: 1;
+            max-width: 400px;
+        }
+
+        .search-bar input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid var(--secondary);
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .search-bar button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 15px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .search-bar button:hover {
+            background-color: var(--primary-light);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .nav-link {
+            text-decoration: none;
+            color: var(--primary);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-link:hover {
+            color: var(--primary-light);
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+        }
+
+        .queries-list {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-height: 600px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .queries-list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--secondary);
+        }
+
+        .queries-list-header h2 {
+            color: var(--primary);
+        }
+
+        .filter-options {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .filter-option {
+            padding: 6px 12px;
+            background-color: white;
+            border: 1px solid var(--secondary);
+            border-radius: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-option:hover {
+            border-color: var(--primary);
+        }
+
+        .filter-option.active {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .query-item {
+            padding: 15px;
+            border: 1px solid #eee;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .query-item:hover {
+            border-color: var(--primary);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .query-item.selected {
+            border-color: var(--primary);
+            background-color: #fff3e0;
+        }
+
+        .query-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .query-id {
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .query-status {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .status-new {
+            background-color: var(--info);
+            color: white;
+        }
+
+        .status-in-progress {
+            background-color: var(--warning);
+            color: white;
+        }
+
+        .status-resolved {
+            background-color: var(--success);
+            color: white;
+        }
+
+        .query-info {
+            font-size: 14px;
+        }
+
+        .query-subject {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .query-detail-panel {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        .query-detail-panel h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--secondary);
+            padding-bottom: 10px;
+        }
+
+        .detail-section {
+            margin-bottom: 25px;
+        }
+
+        .detail-section h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: var(--primary-light);
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .detail-item {
+            margin-bottom: 10px;
+        }
+
+        .detail-label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 2px;
+        }
+
+        .detail-value {
+            font-weight: 500;
+        }
+
+        .query-message-box {
+            background-color: #f9f9f9;
+            border: 1px solid #eee;
+            border-radius: 6px;
+            padding: 15px;
+            margin-top: 10px;
+        }
+
+        .reply-section {
+            margin-top: 30px;
+        }
+
+        .previous-replies {
+            margin-bottom: 20px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .no-replies {
+            color: #999;
+            font-style: italic;
+        }
+
+        .reply-item {
+            background-color: #f0f8ff;
+            border-left: 3px solid var(--info);
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 0 6px 6px 0;
+        }
+
+        .reply-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .new-reply {
+            margin-top: 20px;
+        }
+
+        .new-reply textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            min-height: 100px;
+            resize: vertical;
+            margin-bottom: 15px;
+        }
+
+        .new-reply textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .reply-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-light);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary);
+            color: var(--text);
+        }
+
+        .btn-secondary:hover {
+            background-color: #c0a070;
+        }
+
+        .btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 4px;
+            color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            transform: translateX(120%);
+            transition: transform 0.3s ease-out;
+            z-index: 1000;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background-color: var(--success);
+        }
+
+        .notification.error {
+            background-color: var(--error);
+        }
+
+        .empty-state {
+            padding: 40px 20px;
+            text-align: center;
+            color: #666;
+        }
+
+        .no-query-selected {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #666;
+            padding: 40px 20px;
+        }
+
+        .no-query-selected svg {
+            margin-bottom: 20px;
+            color: var(--secondary);
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+
+            header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .query-detail-panel {
+                order: -1;
+            }
+            
+            .detail-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .filter-options {
+                overflow-x: auto;
+                padding-bottom: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <div class="logo-icon">TDC</div>
+                <div class="logo-text">
+                    <h1>Tanjore Degree Coffee</h1>
+                    <p>Customer Queries</p>
+                </div>
+            </div>
+            <div class="nav-links">
+                <a href="dashboard.html" class="nav-link">Orders Dashboard</a>
+                <a href="contact-queries.html" class="nav-link">Contact Queries</a>
+            </div>
+            <div class="search-bar">
+                <input type="text" id="search-input" placeholder="Search by ID, name or email...">
+                <button id="search-btn">Search</button>
+            </div>
+        </header>
+
+        <div class="content">
+            <div class="queries-list" id="queries-list">
+                <div class="queries-list-header">
+                    <h2>Customer Queries</h2>
+                </div>
+                <div class="filter-options" id="filter-options">
+                    <div class="filter-option active" data-filter="all">All</div>
+                    <div class="filter-option" data-filter="new">New</div>
+                    <div class="filter-option" data-filter="in-progress">In Progress</div>
+                    <div class="filter-option" data-filter="resolved">Resolved</div>
+                </div>
+                <div id="queries-container">
+                    <div class="empty-state">
+                        <p>Loading queries...</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="query-detail-panel" id="query-detail-panel">
+                <div class="no-query-selected" id="no-query-selected">
+                    <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+                    </svg>
+                    <h3>No Query Selected</h3>
+                    <p>Select a query from the list to view details</p>
+                </div>
+
+                <div id="query-details" style="display: none;">
+                    <h2>Query Details <span id="query-id-display">#1</span></h2>
+                    <div class="detail-section">
+                        <h3>Customer Information</h3>
+                        <div class="detail-grid">
+                            <div class="detail-item">
+                                <div class="detail-label">Name</div>
+                                <div class="detail-value" id="customer-name">John Doe</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Email</div>
+                                <div class="detail-value" id="customer-email">john.doe@example.com</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Date Submitted</div>
+                                <div class="detail-value" id="query-date">2023-10-15 14:30:00</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <h3>Query Details</h3>
+                        <div class="detail-item">
+                            <div class="detail-label">Subject</div>
+                            <div class="detail-value" id="query-subject">Coffee Enquiry</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Message</div>
+                            <div class="query-message-box" id="query-message">
+                                I would like to know more about your filter coffee powder options and pricing.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="detail-section reply-section">
+                        <h3>Replies</h3>
+                        <div id="previous-replies" class="previous-replies">
+                            <div class="no-replies">No previous replies</div>
+                        </div>
+                        
+                        <div class="new-reply">
+                            <textarea id="reply-textarea" placeholder="Type your reply here..."></textarea>
+                            <div class="reply-actions">
+                                <button id="send-reply-btn" class="btn btn-primary">Send Reply</button>
+                                <button id="mark-resolved-btn" class="btn btn-secondary">Mark as Resolved</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="notification" class="notification">Notification message</div>
+                
+                </div>
+                </div>
+                </body>
+                </html>
